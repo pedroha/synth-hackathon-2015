@@ -2,6 +2,7 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
     var paper = this,
         rad = Math.PI / 180,
         chart = this.set();
+
     function sector(cx, cy, r, startAngle, endAngle, params) {
         var x1 = cx + r * Math.cos(-startAngle * rad),
             x2 = cx + r * Math.cos(-endAngle * rad),
@@ -9,6 +10,8 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
             y2 = cy + r * Math.sin(-endAngle * rad);
         return paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]).attr(params);
     }
+
+    var pies = [];
 
     var angle = 0,
         total = 0,
@@ -42,7 +45,11 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
                     angle[2] = cy - max;
 
                     var ratio = Math.max(0, Math.max(0, max/cx + 0.2));
-                    console.log("Rad: " + ratio);
+                    // console.log("Rad: " + ratio);
+
+                    if (this.onValueChange) {
+                        this.onValueChange({ratio: ratio});
+                    }
 
                     this.attr('path', path);
                 }
