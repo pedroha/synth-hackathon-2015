@@ -17,7 +17,7 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
             var value = values[j],
                 angleplus = 360 * value / total,
                 popangle = angle + (angleplus / 2),
-                color = Raphael.hsb(start, .75, 1),
+                color = Raphael.hsb(start, .50, 1),
                 ms = 500,
                 delta = 30,
                 bcolor = Raphael.hsb(start, 1, 1),
@@ -40,6 +40,9 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
                     var max = Math.max( Math.abs(x-cx), Math.abs(y-cy));
                     angle[1] = cx - max;
                     angle[2] = cy - max;
+
+                    var ratio = Math.max(0, Math.max(0, max/cx + 0.2));
+                    console.log("Rad: " + ratio);
 
                     this.attr('path', path);
                 }
