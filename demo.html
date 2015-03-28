@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Music Hackathon 2015: Wave and Synths</title>
+
+    <style>
+
+        body {
+            background: #333;
+            color: #fff;
+            font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+        }
+
+        button {
+            width: 100px;
+            height: 100px;
+            font-size: 36px;
+            border-radius: 1000px;
+        }
+
+        button, button:active {
+            border: 0;
+            outline: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="start">Play</button>
+
+    <button class="stop">Stop</button>
+
+
+    <div id="holder"></div>
+
+    <script src="js/raphael.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/pie.js"></script>
+    <script src="js/tone.js"></script>
+    <script src="js/draw.js"></script>
+
+<script>
+    
+// //create one of Tone's built-in synthesizers
+// var synth = new Tone.MonoSynth();
+
+// //connect the synth to the master output channel
+// synth.toMaster();
+
+// //create a callback which is invoked every quarter note
+// Tone.Transport.setInterval(function(time){
+//     //trigger middle C for the duration of an 8th note
+//     synth.triggerAttackRelease("C4", "8n", time);
+// }, "4n");
+
+
+// $('.start').on('click', function() {
+//     //start the transport
+//     Tone.Transport.start();
+// });
+
+// $('.stop').on('click', function() {
+//     Tone.Transport.stop();
+// });
+
+
+var env = new Tone.AmplitudeEnvelope({
+    "attack" : 0.01,
+    "decay" : 0.02,
+    "sustain" : 0.09,
+    "release" : 1.2
+}).toMaster();
+
+var osc = new Tone.Oscillator(440, "square")
+    .connect(env)
+    .start();
+
+//just so it's not soo loud.
+osc.volume.value = -6;
+
+var timer = null;
+
+var play = function(time) {
+    if (timer) {
+        clearInterval(timer);
+    }
+
+    env.triggerAttack();
+    setTimeout(function() {
+        env.triggerRelease();
+    }, time/4*3);
+
+    timer = setInterval(function() {
+        env.triggerAttack();
+
+        setTimeout(function() {
+            env.triggerRelease();
+        }, time/4*3);
+    }, time);
+};
+
+var stop = function() {
+    env.triggerRelease();
+    clearInterval(timer);
+    timer = null;
+};
+
+$('.start').on('click', function() {
+    //start the transport
+    play(1000);
+});
+
+$('.stop').on('click', function() {
+    stop();
+});
+
+
+</script>
+
+
+
+    </body>
+</html>
