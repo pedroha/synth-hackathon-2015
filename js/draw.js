@@ -1,7 +1,7 @@
 $(function () {
 
-    var values = [33, 33, 33],
-        labels = ["Frequency", "Amplitude", "Loudness"];
+    var values = [17, 25, 25, 25],
+        labels = ["Frequency", "Amplitude", "Loudness", "No clue"];
 
     var pies = Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
 
