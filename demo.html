@@ -28,18 +28,15 @@
 </head>
 <body>
 
-    <button class="start">Play</button>
-
-    <button class="stop">Stop</button>
-
-
     <div id="holder"></div>
+
+    <button class="start">Play</button>
+    <button class="stop">Stop</button>
 
     <script src="js/raphael.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/pie.js"></script>
     <script src="js/tone.js"></script>
-    <script src="js/draw.js"></script>
 
 <script>
     
@@ -116,6 +113,37 @@ $('.stop').on('click', function() {
     stop();
 });
 
+
+$(function () {
+
+    var values = [17, 25, 25, 25],
+        labels = ["Frequency", "Amplitude", "Loudness", "No clue"];
+
+    var pies = Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
+
+    pies[0].onValueChange = function(value) {
+        console.log("0", value);
+        env.attack = value.ratio;
+    };
+
+    pies[2].onValueChange = function(value) {
+        console.log("1", value);
+        env.decay = value.ratio;
+    };
+
+    pies[4].onValueChange = function(value) {
+        console.log("2", value);
+        env.sustain = value.ratio;
+    };
+
+    pies[6].onValueChange = function(value) {
+        console.log("3", value);
+        env.release = value.ratio;
+    };
+
+    console.log("Pies: " + pies.length);
+
+});
 
 </script>
 
