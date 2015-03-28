@@ -10,7 +10,6 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
         return paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]).attr(params);
     }
 
-
     var angle = 0,
         total = 0,
         start = 0,
@@ -32,33 +31,22 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
             p.mouseup(function() {
             });
 
-            p.mousemove(function(event, x, y) {
+            var tracker = function(event, x, y) {
                 if (!this.locked) {
                     // console.log(this.attr('path'));
                     var path = this.attr('path');
                     var angle = path[2];
 
-                    var max = Math.max( Math.abs(x-350), Math.abs(y-350));
-                    angle[1] = 350 - max;
-                    angle[2] = 350 - max;
+                    var max = Math.max( Math.abs(x-cx), Math.abs(y-cy));
+                    angle[1] = cx - max;
+                    angle[2] = cy - max;
 
                     this.attr('path', path);
                 }
-            });
+            };
 
-            p.mouseout(function(event, x, y) {
-                if (!this.locked) {
-                    // console.log(this.attr('path'));
-                    var path = this.attr('path');
-                    var angle = path[2];
-
-                    var max = Math.max( Math.abs(x-350), Math.abs(y-350));
-                    angle[1] = 350 - max;
-                    angle[2] = 350 - max;
-
-                    this.attr('path', path);
-                }
-            });
+            p.mousemove(tracker);
+            p.mouseout(tracker);
 
             // p.mouseover(function () {
             //     p.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, "elastic");
