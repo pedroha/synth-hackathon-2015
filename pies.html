@@ -9,7 +9,7 @@
 <!-- Pies examples by Josef 2011-Feb-23-->
 <defs>
  <g id="quarter_pies">
-  <path d="M0,0 L0,-200  A200,200 0 0,1  200,000  z" 
+  <path class="p1" d="M0,0 L0,-200  A200,200 0 0,1  200,000  z" 
     style="fill:#ff0000;fill-opacity: 1;stroke:black;stroke-width: 1"/>
   <path d="M0,0 L-200,0  A200,200 0 0,1    0,-200 z" 
     style="fill:green;fill-opacity: 1;stroke:black;stroke-width: 1"/>
@@ -40,6 +40,26 @@
  <use transform="translate(300,100)  scale(0.25,0.25)" xlink:href="#exploded_quarter_pie"></use>
  <use transform="translate(420,100)  scale(0.25,0.25) rotate(-45)" xlink:href="#exploded_quarter_pie"></use>
 </svg>
+
+<button class="grow">Grow</button>
+
+<script src="jquery.js"></script>
+<script>
+
+
+  var getNewPath = function(dist) {
+    var newPath = "M0,0 L0, -200 A200,200 0 0,1 200,000  z".replace(/200/g, dist);
+    return newPath;
+  };
+
+  var dist = 400;
+
+  var newPath = getNewPath(dist);
+  alert(newPath);
+
+  $('.p1').attr('d', newPath);
+  
+</script>
 
 </body>
 </html>
