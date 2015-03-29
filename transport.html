@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Music Hackathon 2015: Wave and Synths</title>
+
+    <style>
+
+        body {
+            background: #333;
+            color: #fff;
+            font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+        }
+
+        button {
+            width: 100px;
+            height: 100px;
+            font-size: 36px;
+            border-radius: 1000px;
+        }
+
+        button, button:active {
+            border: 0;
+            outline: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="holder"></div>
+
+    <button class="start">Play</button>
+    <button class="stop">Stop</button>
+
+    <script src="js/raphael.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/pie.js"></script>
+    <script src="js/tone.js"></script>
+
+<script>
+
+var synthOptions = {
+    "volume" : -10,
+    "portamento" : 0.05,
+    "oscillator" : {
+        "type" : "square"
+    },
+    "filter": {
+        "Q": 6,
+        "type": "lowpass",
+        "rolloff": -24
+    },
+    "envelope": {
+        "attack": 0.005,
+        "decay": 0.01,
+        "sustain": 0.9,
+        "release": 0.001
+    },
+    "filterEnvelope": {
+        "attack": 0.006,
+        "decay": 0.02,
+        "sustain": 0.5,
+        "release": 0.001,
+        "min": 10,
+        "max": 4000
+    }
+};
+
+//define a score to start with
+var score = [["0", "C2"], ["1*8n", "C4"], ["2*8n", "E4"], ["3*8n", "B3"], 
+    ["4*8n", "G3"], ["5*8n", "C2"], ["6*8n", "C4"], ["7*8n", "B1"]];
+
+//parse the score
+Tone.Note.parseScore({
+    "synth" : score
+});
+
+//just so it's not soo loud.
+// osc.volume.value = -6;
+
+//use the synth presets defined in the JSON 
+var synth = new Tone.MonoSynth(synthOptions).toMaster();
+
+//listen for callbacks on the "synth" channel and trigger the synth
+Tone.Note.route("synth", function(time, note){
+    synth.triggerAttackRelease(note, "8n", time);
+});
+
+//loop the transport
+Tone.Transport.loopEnd = "1m";
+Tone.Transport.loop = true;
+
+var timer = null;
+
+var play = function(time) {
+    if (timer) {
+        clearInterval(timer);
+    }
+
+    env.triggerAttack();
+    setTimeout(function() {
+        env.triggerRelease();
+    }, time/4*3);
+
+    timer = setInterval(function() {
+        env.triggerAttack();
+
+        setTimeout(function() {
+            env.triggerRelease();
+        }, time/4*3);
+    }, time);
+};
+
+var stop = function() {
+    env.triggerRelease();
+    clearInterval(timer);
+    timer = null;
+};
+
+$('.start').on('click', function() {
+    //start the transport
+//    play(1000);
+
+    Tone.Transport.start();
+});
+
+$('.stop').on('click', function() {
+//    stop();
+    Tone.Transport.stop();
+});
+
+
+$(function () {
+
+    var values = [17, 25, 25, 25],
+        labels = ["Frequency", "Amplitude", "Loudness", "No clue"];
+
+    var pies = Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
+
+    var filter = synth.envelope;
+    var filter = synth.filterEnvelope;
+
+
+    pies[0].onValueChange = function(value) {
+        console.log("0", value);
+        filter.attack = value.ratio;
+    };
+
+    pies[2].onValueChange = function(value) {
+        console.log("1", value);
+        filter.decay = value.ratio;
+    };
+
+    pies[4].onValueChange = function(value) {
+        console.log("2", value);
+        filter.sustain = value.ratio;
+    };
+
+    pies[6].onValueChange = function(value) {
+        console.log("3", value);
+        filter.release = value.ratio;
+    };
+
+    console.log("Pies: " + pies.length);
+
+});
+
+</script>
+
+
+
+    </body>
+</html>

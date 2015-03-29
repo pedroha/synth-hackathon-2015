@@ -44,7 +44,7 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
                     angle[1] = cx - max;
                     angle[2] = cy - max;
 
-                    var ratio = Math.max(0, Math.max(0, max/cx + 0.2));
+                    var ratio = Math.max(0, Math.max(0, max/cx));
                     // console.log("Rad: " + ratio);
 
                     if (this.onValueChange) {
