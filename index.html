@@ -28,6 +28,9 @@
 </head>
 <body>
 
+    <h1>Pie Slider</h1>
+    <h4>Pedro</h4>
+
     <div id="holder"></div>
 
     <button class="start">Play</button>
@@ -138,9 +141,8 @@ $(function () {
 
     var pies = Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
 
-    var filter = synth.envelope;
+    // var filter = synth.envelope;
     var filter = synth.filterEnvelope;
-
 
     pies[0].onValueChange = function(value) {
         console.log("0", value);
